@@ -6,16 +6,23 @@ services:
   - docker
 
 before_install:
-  - docker build -t veraloq/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t mkawski/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true veraloq/react-test npm test
+  - docker run -e CI=true mkawski/react-test npm test
 
 after_success:
-  # build production version of all the component of the project
-  - docker build -t veraloq/fib-calc-client ./client
-  - docker build -t veraloq/fib-calc-nginx ./nginx
-  - docker build -t veraloq/fib-calc-server ./server
-  - docker build -t veraloq/fib-calc-worker ./worker
+  # Build production version of all the component of the project.
+  - docker build -t mkawski/fib-calc-client ./client
+  - docker build -t mkawski/fib-calc-nginx ./nginx
+  - docker build -t mkawski/fib-calc-server ./server
+  - docker build -t mkawski/fib-calc-worker ./worker
 
-  # push them to the Docker Hub
+  # Log in to the Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Take these images and push them to Docker Hub.
+  - docker push mkawski/fib-calc-client
+  - docker push mkawski/fib-calc-nginx
+  - docker push mkawski/fib-calc-server
+  - docker push mkawski/fib-calc-worker
