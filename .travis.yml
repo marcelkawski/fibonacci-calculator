@@ -26,3 +26,15 @@ after_success:
   - docker push mkawski/fib-calc-nginx
   - docker push mkawski/fib-calc-server
   - docker push mkawski/fib-calc-worker
+
+deploy:
+  # provider: elasticbeanstalk
+  region: 'eu-north-1'
+  app: 'fibonacci-calculator'
+  env: 'Fibonaccicalculator-env'
+  bucket_name: 'elasticbeanstalk-eu-north-1-343270885324'
+  bucket_path: 'fibonacci-calculator'
+  # on:
+  #   branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: '$AWS_SECRET_KEY'
